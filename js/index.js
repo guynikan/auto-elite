@@ -2,15 +2,18 @@
   "use strict";
 
   var app = (function () {
-    var $header = document.createElement("header");
-    var $name = document.createElement("h1");
-    var $phone = document.createElement("p");
     var $form = new DOM("form");
+    var $photo = new DOM('input[name="photo"]');
+    var $marca = new DOM('input[name="marca"]');
+    var $modelo = new DOM('input[name="modelo"]');
+    var $ano = new DOM('input[name="ano"]');
+    var $placa = new DOM('input[name="placa"]');
+    var $cor = new DOM('input[name="cor"]');
 
     return {
       init: function () {
-        this.initEvents();
-        this.companyInfo();
+        app.initEvents();
+        app.companyInfo();
       },
 
       initEvents: function () {
@@ -27,6 +30,14 @@
       },
 
       createTable: function () {
+        var [table, tbody] = app.createTableStructure();
+
+        table.appendChild(app.createTableBody(tbody));
+
+        return table;
+      },
+
+      createTableStructure: function () {
         var $table;
         var $thead;
         var $tbody;
@@ -34,35 +45,24 @@
         if (!app.hasTable()) {
           $table = document.createElement("table");
           $thead = document.createElement("thead");
+          $tbody = document.createElement("tbody");
 
           $table.appendChild(app.createTableHead($thead));
 
-          $tbody = document.createElement("tbody");
-
-          $table.setAttribute("id", "mytable");
-          $thead.setAttribute("id", "myhead");
-          $tbody.setAttribute("id", "mybody");
+          $table.setAttribute("id", "table");
+          $thead.setAttribute("id", "thead");
+          $tbody.setAttribute("id", "tbody");
         } else {
-          $table = document.getElementById("mytable");
-          $thead = document.getElementById("myhead");
-          $tbody = document.getElementById("mybody");
+          $table = document.getElementById("table");
+          $thead = document.getElementById("thead");
+          $tbody = document.getElementById("tbody");
         }
 
-        $table.appendChild(app.createTableBody($tbody));
-
-        return $table;
-      },
-
-      hasTableHead: function () {
-        if (!app.hasTable()) return false;
-
-        var head = document.getElementById("myhead");
-        var table = document.getElementById("mytable");
-        return table.contains(head);
+        return [$table, $tbody];
       },
 
       hasTable: function () {
-        var table = document.getElementById("mytable");
+        var table = document.getElementById("table");
         return document.body.contains(table);
       },
 
@@ -76,13 +76,13 @@
         var $thCor = document.createElement("th");
         var $thAcao = document.createElement("th");
 
-        $thFoto.innerHTML = "Foto";
-        $thMarca.innerHTML = "Marca";
-        $thModelo.innerHTML = "Modelo";
-        $thAno.innerHTML = "Ano";
-        $thPlaca.innerHTML = "Placa";
-        $thCor.innerHTML = "Cor";
-        $thAcao.innerHTML = "Ação";
+        $thFoto.textContent = "Foto";
+        $thMarca.textContent = "Marca";
+        $thModelo.textContent = "Modelo";
+        $thAno.textContent = "Ano";
+        $thPlaca.textContent = "Placa";
+        $thCor.textContent = "Cor";
+        $thAcao.textContent = "Ação";
 
         $tr.appendChild($thFoto);
         $tr.appendChild($thMarca);
@@ -98,13 +98,6 @@
       },
 
       createTableBody: function ($tbody) {
-        var $photo = new DOM('input[name="photo"]');
-        var $marca = new DOM('input[name="marca"]');
-        var $modelo = new DOM('input[name="modelo"]');
-        var $ano = new DOM('input[name="ano"]');
-        var $placa = new DOM('input[name="placa"]');
-        var $cor = new DOM('input[name="cor"]');
-
         var $tr = document.createElement("tr");
         var $tdPhoto = document.createElement("td");
         var $tdMarca = document.createElement("td");
@@ -164,6 +157,10 @@
       },
 
       setCompanyInfo: function (name, phone) {
+        var $header = document.createElement("header");
+        var $name = document.createElement("h1");
+        var $phone = document.createElement("p");
+
         $name.textContent = name;
         $phone.textContent = phone;
 
