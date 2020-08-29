@@ -3,12 +3,12 @@
 
   var app = (function () {
     var $form = new DOM("form");
-    var $photo = new DOM('input[name="photo"]');
-    var $marca = new DOM('input[name="marca"]');
-    var $modelo = new DOM('input[name="modelo"]');
-    var $ano = new DOM('input[name="ano"]');
-    var $placa = new DOM('input[name="placa"]');
-    var $cor = new DOM('input[name="cor"]');
+    var $image = new DOM('input[name="photo"]');
+    var $brand = new DOM('input[name="marca"]');
+    var $model = new DOM('input[name="modelo"]');
+    var $year = new DOM('input[name="ano"]');
+    var $plate = new DOM('input[name="placa"]');
+    var $color = new DOM('input[name="cor"]');
 
     return {
       init: function () {
@@ -68,29 +68,29 @@
 
       createTableHead: function ($thead) {
         var $tr = document.createElement("tr");
-        var $thFoto = document.createElement("th");
-        var $thMarca = document.createElement("th");
-        var $thModelo = document.createElement("th");
-        var $thAno = document.createElement("th");
-        var $thPlaca = document.createElement("th");
-        var $thCor = document.createElement("th");
-        var $thAcao = document.createElement("th");
+        var $thImage = document.createElement("th");
+        var $thBrand = document.createElement("th");
+        var $thModel = document.createElement("th");
+        var $thYear = document.createElement("th");
+        var $thPlate = document.createElement("th");
+        var $thColor = document.createElement("th");
+        var $thAction = document.createElement("th");
 
-        $thFoto.textContent = "Foto";
-        $thMarca.textContent = "Marca";
-        $thModelo.textContent = "Modelo";
-        $thAno.textContent = "Ano";
-        $thPlaca.textContent = "Placa";
-        $thCor.textContent = "Cor";
-        $thAcao.textContent = "Ação";
+        $thImage.textContent = "Image";
+        $thBrand.textContent = "Brand";
+        $thModel.textContent = "Model";
+        $thYear.textContent = "Year";
+        $thPlate.textContent = "Plate";
+        $thColor.textContent = "Color";
+        $thAction.textContent = "Action";
 
-        $tr.appendChild($thFoto);
-        $tr.appendChild($thMarca);
-        $tr.appendChild($thModelo);
-        $tr.appendChild($thAno);
-        $tr.appendChild($thPlaca);
-        $tr.appendChild($thCor);
-        $tr.appendChild($thAcao);
+        $tr.appendChild($thImage);
+        $tr.appendChild($thBrand);
+        $tr.appendChild($thModel);
+        $tr.appendChild($thYear);
+        $tr.appendChild($thPlate);
+        $tr.appendChild($thColor);
+        $tr.appendChild($thAction);
 
         $thead.appendChild($tr);
 
@@ -99,32 +99,32 @@
 
       createTableBody: function ($tbody) {
         var $tr = document.createElement("tr");
-        var $tdPhoto = document.createElement("td");
-        var $tdMarca = document.createElement("td");
-        var $tdModelo = document.createElement("td");
-        var $tdAno = document.createElement("td");
-        var $tdPlaca = document.createElement("td");
-        var $tdCor = document.createElement("td");
+        var $tdImage = document.createElement("td");
+        var $tdBrand = document.createElement("td");
+        var $tdModel = document.createElement("td");
+        var $tdYear = document.createElement("td");
+        var $tdPlate = document.createElement("td");
+        var $tdColor = document.createElement("td");
         var $remover = document.createElement("input");
 
         $remover.setAttribute("type", "button");
 
-        $tdPhoto.textContent = $photo.get()[0].value;
-        $tdMarca.textContent = $marca.get()[0].value;
-        $tdModelo.textContent = $modelo.get()[0].value;
-        $tdAno.textContent = $ano.get()[0].value;
-        $tdPlaca.textContent = $placa.get()[0].value;
-        $tdCor.textContent = $cor.get()[0].value;
+        $tdImage.textContent = $image.get()[0].value;
+        $tdBrand.textContent = $brand.get()[0].value;
+        $tdModel.textContent = $model.get()[0].value;
+        $tdYear.textContent = $year.get()[0].value;
+        $tdPlate.textContent = $plate.get()[0].value;
+        $tdColor.textContent = $color.get()[0].value;
         $remover.value = "Remover";
 
         app.removeItem($remover, $tr);
 
-        $tr.appendChild($tdPhoto);
-        $tr.appendChild($tdMarca);
-        $tr.appendChild($tdModelo);
-        $tr.appendChild($tdAno);
-        $tr.appendChild($tdPlaca);
-        $tr.appendChild($tdCor);
+        $tr.appendChild($tdImage);
+        $tr.appendChild($tdBrand);
+        $tr.appendChild($tdModel);
+        $tr.appendChild($tdYear);
+        $tr.appendChild($tdPlate);
+        $tr.appendChild($tdColor);
         $tr.appendChild($remover);
 
         $tbody.appendChild($tr);
