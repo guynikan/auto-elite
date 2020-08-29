@@ -141,6 +141,18 @@
         });
       },
 
+      insertNewCar: function (image, brand, model, year, plate, color) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "http://localhost:3100/car");
+        xhr.setRequestHeader(
+          "Content-Type",
+          "application/x-www-form-urlencoded"
+        );
+        xhr.send(
+          `image=${image}$brand=${brand}&model=${model}&year=${year}&plate=${plate}&color=${color}`
+        );
+      },
+
       companyInfo: function () {
         var xhr = new XMLHttpRequest();
         xhr.open("GET", "data/company.json");
@@ -148,6 +160,7 @@
 
         xhr.addEventListener("readystatechange", this.getCompanyInfo);
       },
+
       getCompanyInfo: function () {
         if (this.status === 200 && this.readyState === 4) {
           var { name, phone } = JSON.parse(this.responseText);
