@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RentCars</title>
+    <style>
+      body {
+        background-color: #515c6b;
+      }
+      form {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+
+        margin-top: 20px;
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      ul {
+        list-style: none;
+      }
+      li {
+        margin: 20px;
+      }
+
+      input[type="submit"],
+      input[type="button"] {
+        border-style: none;
+        width: 90px;
+        height: 40px;
+        background-color: tomato;
+        font-weight: bold;
+      }
+
+      input[type="submit"]:hover,
+      input[type="button"]:hover {
+        color: tomato;
+        background-color: black;
+        cursor: pointer;
+      }
+
+      input[type="submit"]:focus {
+        background-color: black;
+        color: tomato;
+      }
+
+      input {
+        display: block;
+        height: 20px;
+        border: solid 1px #272726;
+        background-color: #68768a;
+      }
+      th {
+        background-color: tomato;
+        color: #eef5db;
+      }
+
+      th,
+      td {
+        padding: 5px;
+      }
+
+      tbody tr:nth-child(odd) {
+        background-color: #4f6367;
+      }
+
+      tbody tr:nth-child(even) {
+        background-color: #7a9e9f;
+      }
+    </style>
+  </head>
+  <body>
+    <form action="" method="post">
+      <ul>
+        <li>
+          <label for="photo">Foto (url)</label>
+          <input type="url" name="photo" id="photo" />
+        </li>
+        <li>
+          <label for="marca">Marca</label>
+          <input type="text" name="marca" id="marca" />
+        </li>
+        <li>
+          <label for="modelo">Modelo</label>
+          <input type="text" name="modelo" id="modelo" />
+        </li>
+        <li>
+          <label for="ano">Ano</label>
+          <input type="text" name="ano" id="ano" />
+        </li>
+        <li>
+          <label for="placa">Placa</label>
+          <input type="text" name="placa" id="placa" />
+        </li>
+        <li>
+          <label for="cor">Cor</label>
+          <input type="text" name="cor" id="cor" />
+        </li>
+        <li>
+          <input type="submit" value="Cadastrar" />
+        </li>
+      </ul>
+    </form>
+    <script src="/js/DOM.js"></script>
+    <script src="/js/index.js"></script>
+  </body>
+</html>
