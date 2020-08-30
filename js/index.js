@@ -9,139 +9,62 @@
     var $year = new DOM('input[name="ano"]');
     var $plate = new DOM('input[name="placa"]');
     var $color = new DOM('input[name="cor"]');
+    var $tbody = new DOM('[data-js="tbody"]');
 
     return {
       init: function () {
         app.initEvents();
         app.companyInfo();
+        app.getCars();
       },
 
       initEvents: function () {
         $form.on("submit", this.handleSubmit);
+        app.getCars();
+        var $button = new DOM('input[type="button"]');
+        console.log($button);
       },
 
       handleSubmit: function (e) {
         e.preventDefault();
-        app.createNewCar();
+        app.insertNewCar();
+        app.getCars();
       },
 
-      createNewCar: function () {
-        document.body.appendChild(app.createTable());
+      getCars: function () {
+        var xhr = new XMLHttpRequest();
+
+        xhr.open("GET", "http://localhost:3100/car");
+        xhr.send();
+
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4) {
+            var cars = JSON.parse(xhr.responseText);
+            app.createCarData(cars);
+          }
+        };
       },
 
-      createTable: function () {
-        var [table, tbody] = app.createTableStructure();
-
-        table.appendChild(app.createTableBody(tbody));
-
-        return table;
-      },
-
-      createTableStructure: function () {
-        var $table;
-        var $thead;
-        var $tbody;
-
-        if (!app.hasTable()) {
-          $table = document.createElement("table");
-          $thead = document.createElement("thead");
-          $tbody = document.createElement("tbody");
-
-          $table.appendChild(app.createTableHead($thead));
-
-          $table.setAttribute("id", "table");
-          $thead.setAttribute("id", "thead");
-          $tbody.setAttribute("id", "tbody");
-        } else {
-          $table = document.getElementById("table");
-          $thead = document.getElementById("thead");
-          $tbody = document.getElementById("tbody");
-        }
-
-        return [$table, $tbody];
-      },
-
-      hasTable: function () {
-        var table = document.getElementById("table");
-        return document.body.contains(table);
-      },
-
-      createTableHead: function ($thead) {
-        var $tr = document.createElement("tr");
-        var $thImage = document.createElement("th");
-        var $thBrand = document.createElement("th");
-        var $thModel = document.createElement("th");
-        var $thYear = document.createElement("th");
-        var $thPlate = document.createElement("th");
-        var $thColor = document.createElement("th");
-        var $thAction = document.createElement("th");
-
-        $thImage.textContent = "Image";
-        $thBrand.textContent = "Brand";
-        $thModel.textContent = "Model";
-        $thYear.textContent = "Year";
-        $thPlate.textContent = "Plate";
-        $thColor.textContent = "Color";
-        $thAction.textContent = "Action";
-
-        $tr.appendChild($thImage);
-        $tr.appendChild($thBrand);
-        $tr.appendChild($thModel);
-        $tr.appendChild($thYear);
-        $tr.appendChild($thPlate);
-        $tr.appendChild($thColor);
-        $tr.appendChild($thAction);
-
-        $thead.appendChild($tr);
-
-        return $thead;
-      },
-
-      createTableBody: function ($tbody) {
-        var $tr = document.createElement("tr");
-        var $tdImage = document.createElement("td");
-        var $tdBrand = document.createElement("td");
-        var $tdModel = document.createElement("td");
-        var $tdYear = document.createElement("td");
-        var $tdPlate = document.createElement("td");
-        var $tdColor = document.createElement("td");
-        var $remover = document.createElement("input");
-
-        $remover.setAttribute("type", "button");
-
-        $tdImage.textContent = $image.get()[0].value;
-        $tdBrand.textContent = $brand.get()[0].value;
-        $tdModel.textContent = $model.get()[0].value;
-        $tdYear.textContent = $year.get()[0].value;
-        $tdPlate.textContent = $plate.get()[0].value;
-        $tdColor.textContent = $color.get()[0].value;
-        $remover.value = "Remover";
-
-        app.removeItem($remover, $tr);
-
-        $tr.appendChild($tdImage);
-        $tr.appendChild($tdBrand);
-        $tr.appendChild($tdModel);
-        $tr.appendChild($tdYear);
-        $tr.appendChild($tdPlate);
-        $tr.appendChild($tdColor);
-        $tr.appendChild($remover);
-
-        $tbody.appendChild($tr);
-
-        return $tbody;
-      },
-
-      removeItem: function (button, item) {
-        button.addEventListener("click", function (e) {
-          e.preventDefault();
-
-          var tbody = document.querySelector("tbody");
-          tbody.removeChild(item);
+      createCarData: function (cars) {
+        console.log("here", cars, "tbo", $tbody);
+        var data = cars.map((car) => {
+          return `<tr id=${car.id}>
+           <td>${car.image}</td>
+           <td>${car.brand}</td>
+           <td>${car.model}</td>
+           <td>${car.year}</td>
+           <td>${car.plate}</td>
+           <td>${car.color}</td>
+           <td><input type="button"  value="Remover"></td>
+           </tr>`;
         });
+
+        $tbody.get()[0].innerHTML = data.join("");
       },
 
-      insertNewCar: function (image, brand, model, year, plate, color) {
+      insertNewCar: function () {
+        var [image, brand, model, year, plate, color] = app.getFormValues();
+
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "http://localhost:3100/car");
         xhr.setRequestHeader(
@@ -149,8 +72,26 @@
           "application/x-www-form-urlencoded"
         );
         xhr.send(
-          `image=${image}$brand=${brand}&model=${model}&year=${year}&plate=${plate}&color=${color}`
+          `image=${image}&brand=${brand}&model=${model}&year=${year}&plate=${plate}&color=${color}`
         );
+
+        console.log("Cadastrando veículo...");
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4) {
+            console.log("Veículo cadastrado", xhr.responseText);
+          }
+        };
+      },
+
+      getFormValues: function () {
+        return [
+          $image.get()[0].value,
+          $brand.get()[0].value,
+          $model.get()[0].value,
+          $year.get()[0].value,
+          $plate.get()[0].value,
+          $color.get()[0].value,
+        ];
       },
 
       companyInfo: function () {
