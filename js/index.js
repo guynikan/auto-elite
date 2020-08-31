@@ -3,13 +3,13 @@
 
   var app = (function () {
     var $form = new DOM("form");
+    var $tbody = new DOM('[data-js="tbody"]');
     var $image = new DOM('input[name="photo"]');
     var $brand = new DOM('input[name="marca"]');
     var $model = new DOM('input[name="modelo"]');
     var $year = new DOM('input[name="ano"]');
     var $plate = new DOM('input[name="placa"]');
     var $color = new DOM('input[name="cor"]');
-    var $tbody = new DOM('[data-js="tbody"]');
 
     return {
       init: function () {
@@ -20,18 +20,23 @@
 
       initEvents: function () {
         $form.on("submit", this.handleSubmit);
-        app.getCars();
-        var $button = new DOM('input[type="button"]');
-        console.log($button);
+      },
+
+      clearTableData: function () {
+        if ($tbody.get()[0].hasChildNodes()) {
+          $tbody.get()[0].innerHTML = "";
+        }
       },
 
       handleSubmit: function (e) {
         e.preventDefault();
         app.insertNewCar();
-        app.getCars();
+        app.updateCars();
       },
 
       getCars: function () {
+        app.clearTableData();
+
         var xhr = new XMLHttpRequest();
 
         xhr.open("GET", "http://localhost:3100/car");
@@ -45,21 +50,80 @@
         };
       },
 
+      updateCars: function () {
+        var xhr = new XMLHttpRequest();
+
+        xhr.open("PUT", "http://localhost:3100/car");
+        xhr.send();
+
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4) {
+            var car = JSON.parse(xhr.responseText);
+
+            app.createCarData(car);
+          }
+        };
+      },
+
       createCarData: function (cars) {
-        console.log("here", cars, "tbo", $tbody);
-        var data = cars.map((car) => {
-          return `<tr id=${car.id}>
-           <td>${car.image}</td>
-           <td>${car.brand}</td>
-           <td>${car.model}</td>
-           <td>${car.year}</td>
-           <td>${car.plate}</td>
-           <td>${car.color}</td>
-           <td><input type="button"  value="Remover"></td>
-           </tr>`;
+        cars.forEach(function (car) {
+          var $tr = document.createElement("tr");
+          var $image = document.createElement("td");
+          var $brand = document.createElement("td");
+          var $model = document.createElement("td");
+          var $year = document.createElement("td");
+          var $plate = document.createElement("td");
+          var $color = document.createElement("td");
+          var $action = document.createElement("td");
+
+          var $button = app.createButtonRemove(car);
+
+          $image.textContent = car.image;
+          $brand.textContent = car.brand;
+          $model.textContent = car.model;
+          $year.textContent = car.year;
+          $plate.textContent = car.plate;
+          $color.textContent = car.color;
+
+          $tr.appendChild($image);
+          $tr.appendChild($brand);
+          $tr.appendChild($model);
+          $tr.appendChild($year);
+          $tr.appendChild($plate);
+          $tr.appendChild($color);
+          $tr.appendChild($button);
+          $tbody.get()[0].appendChild($tr);
+        });
+      },
+
+      createButtonRemove: function (car) {
+        var $button = document.createElement("input");
+        $button.setAttribute("type", "button");
+        $button.value = "Remove";
+
+        $button.addEventListener("click", function (e) {
+          app.deleteCar(car.id);
+          app.getCars();
         });
 
-        $tbody.get()[0].innerHTML = data.join("");
+        return $button;
+      },
+
+      deleteCar: function (id) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("DELETE", "http://localhost:3100/car");
+        xhr.setRequestHeader(
+          "Content-Type",
+          "application/x-www-form-urlencoded"
+        );
+        xhr.send(`id=${id}`);
+
+        console.log("Removendo veículo...");
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4) {
+            console.log("Veículo removido", xhr.responseText);
+          }
+        };
       },
 
       insertNewCar: function () {
